@@ -565,11 +565,8 @@
     <!-- HD Canvas Smoke & Fog Background Animation -->
     <canvas id="smokeCanvas" aria-hidden="true"></canvas>
 
-    <!-- Background Audio Element (Starts Paused by Default) -->
-    <audio id="bgAudio" loop preload="auto">
-        <source src="Chains-mastered.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Background Audio Playlist Element (Starts Paused by Default) -->
+    <audio id="bgAudio" preload="auto"></audio>
 
     <div class="top-nav-controls">
         <!-- Top Left Group: Standalone Play Button & Links Menu -->
@@ -1037,9 +1034,31 @@
             }
         });
 
-        // Standalone Play/Pause Audio Control
+        // Background Audio Playlist Engine
+        const playlist = [
+            'Chains-mastered.mp3',
+            'There-is-Love-mastered.mp3',
+            'Sold-mastered.mp3'
+        ];
+        let currentTrackIndex = 0;
+
         const bgAudio = document.getElementById('bgAudio');
         const bgMusicBtn = document.getElementById('bgMusicToggleBtn');
+
+        function loadTrack(index) {
+            bgAudio.src = playlist[index];
+            bgAudio.load();
+        }
+
+        loadTrack(currentTrackIndex);
+
+        bgAudio.addEventListener('ended', () => {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(currentTrackIndex);
+            bgAudio.play().catch(err => {
+                console.log("Auto-play next track blocked or failed:", err);
+            });
+        });
 
         function toggleBackgroundMusic() {
             if (bgAudio.paused) {
@@ -1062,7 +1081,7 @@
             bgMusicBtn.textContent = '▶ Play Music';
         });
 
-        // Silky-Smooth Continuous Gliding Engine using requestAnimationFrame
+        // Time-Delta Uniform Scrolling Engine (Independent of 60Hz/120Hz/144Hz Refresh Rates)
         const activeGlides = {};
 
         function smoothGlideTo(container, targetScrollLeft, duration = 600) {
@@ -1094,32 +1113,41 @@
             activeGlides[container.id] = requestAnimationFrame(step);
         }
 
-        function setupAutoGlide(container, speed = 0.5) {
+        function setupAutoGlide(container, speedPxPerSec = 30) {
             let isPaused = false;
-            let autoGlideId;
+            let lastTime = performance.now();
 
-            const stepAuto = () => {
+            const stepAuto = (currentTime) => {
+                const deltaTime = (currentTime - lastTime) / 1000;
+                lastTime = currentTime;
+
                 if (!isPaused && !activeGlides[container.id]) {
                     const maxScroll = container.scrollWidth - container.clientWidth;
                     if (container.scrollLeft >= maxScroll - 2) {
                         container.scrollLeft = 0; 
                     } else {
-                        container.scrollLeft += speed; 
+                        container.scrollLeft += speedPxPerSec * deltaTime; 
                     }
                 }
-                autoGlideId = requestAnimationFrame(stepAuto);
+                requestAnimationFrame(stepAuto);
             };
 
-            autoGlideId = requestAnimationFrame(stepAuto);
+            requestAnimationFrame(stepAuto);
 
             container.addEventListener('mouseenter', () => { isPaused = true; });
-            container.addEventListener('mouseleave', () => { isPaused = false; });
+            container.addEventListener('mouseleave', () => { 
+                isPaused = false; 
+                lastTime = performance.now(); // reset delta time reference to avoid a jump
+            });
             container.addEventListener('touchstart', () => { isPaused = true; });
-            container.addEventListener('touchend', () => { isPaused = false; });
+            container.addEventListener('touchend', () => { 
+                isPaused = false; 
+                lastTime = performance.now(); 
+            });
         }
 
         document.querySelectorAll('.carousel-container').forEach(carousel => {
-            setupAutoGlide(carousel, 0.5);
+            setupAutoGlide(carousel, 30); // 30 pixels per second uniformly across all screens
         });
 
         function manualGlide(carouselId, direction) {
