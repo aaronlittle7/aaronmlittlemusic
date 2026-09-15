@@ -66,7 +66,7 @@
             z-index: -1;
         }
 
-        /* Top Controls Layout (Menu Icon Top Left, Theme Toggle Top Right) */
+        /* Top Controls Layout */
         .top-nav-controls {
             position: absolute;
             top: 1.5rem;
@@ -76,6 +76,36 @@
             justify-content: space-between;
             align-items: center;
             z-index: 100;
+        }
+
+        .top-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Standalone Audio Play Button */
+        .audio-control-btn {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .audio-control-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         /* Hamburger Menu Icon */
@@ -129,8 +159,10 @@
 
         .dropdown-menu a {
             display: block;
+            width: 100%;
             padding: 0.6rem 1.2rem;
             color: var(--text-main);
+            background: transparent;
             text-decoration: none;
             font-size: 0.8rem;
             letter-spacing: 1px;
@@ -287,7 +319,7 @@
             border-color: var(--accent);
         }
 
-        /* Carousel Architecture */
+        /* Carousel Architecture with Smooth Continuous Gliding */
         .carousel-wrapper {
             position: relative;
             display: flex;
@@ -295,19 +327,19 @@
         }
 
         .carousel-container {
-            width: 100%;
-            overflow: hidden;
-            padding: 1rem 0.25rem;
-        }
-
-        .carousel-track {
             display: flex;
+            overflow-x: auto;
+            scroll-behavior: auto; 
             gap: 2rem;
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            will-change: transform;
+            width: 100%;
+            padding: 1rem 0.25rem;
+            scrollbar-width: none; 
         }
 
-        /* Carousel Cards: Exactly 3 items visible on desktop */
+        .carousel-container::-webkit-scrollbar {
+            display: none; 
+        }
+
         .carousel-item {
             flex: 0 0 calc((100% - 4rem) / 3);
             min-width: 280px;
@@ -325,7 +357,6 @@
             }
         }
 
-        /* Carousel Nav Buttons */
         .carousel-btn {
             position: absolute;
             top: 50%;
@@ -362,7 +393,6 @@
             right: -22px;
         }
 
-        /* Fully Transparent Glassmorphism Cards with subtle shadows */
         .album-card {
             background-color: var(--bg-card);
             backdrop-filter: blur(16px);
@@ -438,14 +468,13 @@
             letter-spacing: 1px;
         }
 
-        /* Transparent Text Box / Info Area under cards (Centered Text Alignment) */
         .album-info {
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
             background: transparent;
-            text-align: center; /* Centered for clean symmetry */
+            text-align: center;
             align-items: center;
         }
 
@@ -455,7 +484,6 @@
             margin-bottom: 0.2rem;
         }
 
-        /* Subtitle to distinguish artist per project */
         .album-info .artist-subtitle {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -477,30 +505,30 @@
             font-size: 0.92rem;
             margin-bottom: 1.5rem;
             flex-grow: 1;
-            text-align: center; /* Centered paragraph text */
+            text-align: center;
         }
 
         .btn-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.4rem;
             margin-top: auto;
             width: 100%;
             justify-content: center;
         }
 
         .btn {
-            flex: 1;
-            min-width: 40%;
+            flex: 1 1 45%;
+            min-width: 42%;
             text-align: center;
             background: rgba(0, 0, 0, 0.15);
             color: var(--text-main);
             border: 1px solid var(--border);
-            padding: 0.5rem 0.4rem;
+            padding: 0.45rem 0.3rem;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.68rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-decoration: none;
             transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -516,7 +544,6 @@
             border-color: var(--accent);
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 3rem 1rem;
@@ -538,15 +565,29 @@
     <!-- HD Canvas Smoke & Fog Background Animation -->
     <canvas id="smokeCanvas" aria-hidden="true"></canvas>
 
+    <!-- Background Audio Element (Starts Paused by Default) -->
+    <audio id="bgAudio" loop preload="auto">
+        <source src="Chains-mastered.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="top-nav-controls">
-        <!-- Navigation Menu (Top Left) -->
-        <div class="menu-container">
-            <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" aria-label="Toggle navigation menu">
-                <span>&#9776;</span> <span>Links</span>
+        <!-- Top Left Group: Standalone Play Button & Links Menu -->
+        <div class="top-left-group">
+            <!-- Standalone Music Play/Pause Button -->
+            <button class="audio-control-btn" id="bgMusicToggleBtn" onclick="toggleBackgroundMusic()" aria-label="Toggle background music">
+                ▶ Play Music
             </button>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <a href="https://aaronmlittle.com" target="_blank">Aaron M. Little</a>
-                <a href="https://aksour.com" target="_blank">AK Sour</a>
+
+            <!-- Navigation Menu -->
+            <div class="menu-container">
+                <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+                    <span>&#9776;</span> <span>Links</span>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="https://aaronmlittle.com" target="_blank">Aaron M. Little</a>
+                    <a href="https://aksour.com" target="_blank">AK Sour</a>
+                </div>
             </div>
         </div>
 
@@ -569,7 +610,7 @@
 
     <div class="container">
 
-        <!-- === CAROUSEL 1: ALBUMS (Showing 3 at a time) === -->
+        <!-- === CAROUSEL 1: ALBUMS === -->
         <section>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
                 <h2 style="margin-bottom: 0; flex: 1;">Complete Discography</h2>
@@ -577,378 +618,369 @@
             </div>
 
             <div class="carousel-wrapper">
-                <button class="carousel-btn prev" onclick="moveCarousel('albumsCarousel', -1)" aria-label="Previous albums">&#10094;</button>
+                <button class="carousel-btn prev" onclick="manualGlide('albumsCarousel', -1)" aria-label="Previous albums">&#10094;</button>
                 <div class="carousel-container" id="albumsCarousel">
-                    <div class="carousel-track">
-                        
-                        <!-- Album 1: Aaron M. Little - Epexegesis (2021) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="epexegesis.jpg" alt="Epexegesis Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>EPEXEGESIS</span>
-                                        <p>2021 Solo Release</p>
-                                    </div>
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="epexegesis.jpg" alt="Epexegesis Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>EPEXEGESIS</span>
+                                    <p>2021 Solo Release</p>
                                 </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">Aaron M. Little</span>
-                                    <h3>Epexegesis</h3>
-                                    <span class="year">2021</span>
-                                    <p>The 16-year gap of creative output is bridged with this collection of thought-provoking cuts.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/6NgmUdu7iGo0tcWynmLHEo" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/epexegesis/1573690958" target="_blank" class="btn">Apple</a>
-                                    </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">Aaron M. Little</span>
+                                <h3>Epexegesis</h3>
+                                <span class="year">2021</span>
+                                <p>The 16-year gap of creative output is bridged with this collection of thought-provoking cuts.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/6NgmUdu7iGo0tcWynmLHEo" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/epexegesis/1573690958" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=geDcrrDu-WI&list=OLAK5uy_nK9FIzj8AnWguTnEqhIHeSO8M6Ny3ScuM" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/music/player/albums/B097S8K1L3" target="_blank" class="btn">Amazon</a>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Album 2: Aaron M. Little - Aaron M. Little (2005) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="aaronmlittle_solo.jpg" alt="Aaron M. Little Debut Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>AARON M. LITTLE</span>
-                                        <p>2005 Solo Debut</p>
-                                    </div>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">Aaron M. Little</span>
-                                    <h3>Aaron M. Little</h3>
-                                    <span class="year">2005</span>
-                                    <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/5zTAl2pU8F2ZFZ9zMdjzmm" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/aaron-m-little/1157196771" target="_blank" class="btn">Apple</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Album 3: AK Sour - Explain the Game (2002) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="aksour-etg.jpg" alt="Explain the Game Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>EXPLAIN THE GAME</span>
-                                        <p>2002 Release</p>
-                                    </div>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Explain the Game</h3>
-                                    <span class="year">2002</span>
-                                    <p>A solid effort that stands as the definitive culmination of the group's studio evolution.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/0FiWdVSlbyPZhyjyDYTFwU" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/explain-the-game/1157048497" target="_blank" class="btn">Apple</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Album 4: AK Sour - Well Done (2000) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="aksour-welldone.jpg" alt="Well Done Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>WELL DONE</span>
-                                        <p>2000 Release</p>
-                                    </div>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Well Done</h3>
-                                    <span class="year">2000</span>
-                                    <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/32H2CeuFXHQhPs8bpI5H47" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/well-done/1157018542" target="_blank" class="btn">Apple</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Album 5: AK Sour - AK Sour Self-Titled (1999) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="aksour.jpg" alt="AK Sour Self-Titled Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>AK SOUR</span>
-                                        <p>1999 Release</p>
-                                    </div>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>AK Sour</h3>
-                                    <span class="year">1999</span>
-                                    <p>The self-titled introduction to the rock duo’s take on life in the 90s with gritty high-energy blueprint.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/7sYGq4NRnwO45yq2smoCf2" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/ak-sour/1157228784" target="_blank" class="btn">Apple</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Album 6: Duck - Sauce (1997) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="duck-sauce.jpg" alt="Sauce Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>SAUCE</span>
-                                        <p>1997 Duck Release</p>
-                                    </div>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">Duck</span>
-                                    <h3>Sauce</h3>
-                                    <span class="year">1997</span>
-                                    <p>A raw, independent snapshot of mid-90s alternative rock grit and analog tape production ethos.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/4ZaZ5Q26zyl2yTU6a6N23g" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/sauce/1322249838" target="_blank" class="btn">Apple</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Album 7: Duck - Opportunities (2003) -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="album-art-container">
-                                    <img src="duck-opportunities.jpg" alt="Opportunities Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                                    <div class="album-art-fallback" style="display:none;">
-                                        <span>OPPORTUNITIES</span>
-                                        <p>2003 Collection</p>
-                                    </div>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">Duck</span>
-                                    <h3>Opportunities</h3>
-                                    <span class="year">2003</span>
-                                    <p>A definitive retrospective gathering strongest unreleased tracks and reimagined favorites.</p>
-                                    <div class="btn-container">
-                                        <a href="https://open.spotify.com/album/5bhBO4RjbNGmUO264A3It2" target="_blank" class="btn">Spotify</a>
-                                        <a href="https://music.apple.com/il/album/opportunities/1323164790" target="_blank" class="btn">Apple</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="aaronmlittle_solo.jpg" alt="Aaron M. Little Debut Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>AARON M. LITTLE</span>
+                                    <p>2005 Solo Debut</p>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">Aaron M. Little</span>
+                                <h3>Aaron M. Little</h3>
+                                <span class="year">2005</span>
+                                <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/5zTAl2pU8F2ZFZ9zMdjzmm" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/aaron-m-little/1157196771" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=gz_9jAjAikI&list=OLAK5uy_mJouZRk1fH8jcbsXYEiALzu9qN3qf0KjE" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/music/player/albums/B01M0830MU" target="_blank" class="btn">Amazon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="aksour-etg.jpg" alt="Explain the Game Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>EXPLAIN THE GAME</span>
+                                    <p>2002 Release</p>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Explain the Game</h3>
+                                <span class="year">2002</span>
+                                <p>A solid effort that stands as the definitive culmination of the group's studio evolution.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/0FiWdVSlbyPZhyjyDYTFwU" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/explain-the-game/1157048497" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=HaUXU74d7Xs&list=OLAK5uy_nmdADK-EnP-CBiXubTrxDbmFZKppJNC_Q" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/music/player/albums/B01LYLJ8J2" target="_blank" class="btn">Amazon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="aksour-welldone.jpg" alt="Well Done Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>WELL DONE</span>
+                                    <p>2000 Release</p>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Well Done</h3>
+                                <span class="year">2000</span>
+                                <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/32H2CeuFXHQhPs8bpI5H47" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/well-done/1157018542" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=yrzCZDClWCY&list=OLAK5uy_kQjXcy3Xz87VkCvpd5fZ2NA-oXfE_7Fgc" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/Right-in-You/dp/B01LXY1N3E" target="_blank" class="btn">Amazon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="aksour.jpg" alt="AK Sour Self-Titled Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>AK SOUR</span>
+                                    <p>1999 Release</p>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>AK Sour</h3>
+                                <span class="year">1999</span>
+                                <p>The self-titled introduction to the rock duo’s take on life in the 90s with gritty high-energy blueprint.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/7sYGq4NRnwO45yq2smoCf2" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/ak-sour/1157228784" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=IYGIb-1NFo0&list=OLAK5uy_kzfxUfrKvW6eWM1YBVrRtU_mKik4VKi3w" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/music/player/albums/B01LZ8T47W" target="_blank" class="btn">Amazon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="duck-sauce.jpg" alt="Sauce Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>SAUCE</span>
+                                    <p>1997 Duck Release</p>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">Duck</span>
+                                <h3>Sauce</h3>
+                                <span class="year">1997</span>
+                                <p>A raw, independent snapshot of mid-90s alternative rock grit and analog tape production ethos.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/4ZaZ5Q26zyl2yTU6a6N23g" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/sauce/1322249838" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=RLrVRicC8oQ&list=OLAK5uy_lN4NL_c_zrrHBk5_9G7W3gpc1UxCnldI8" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/music/player/albums/B077Z4N4Q9" target="_blank" class="btn">Amazon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="album-art-container">
+                                <img src="duck-opportunities.jpg" alt="Opportunities Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                <div class="album-art-fallback" style="display:none;">
+                                    <span>OPPORTUNITIES</span>
+                                    <p>2003 Collection</p>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">Duck</span>
+                                <h3>Opportunities</h3>
+                                <span class="year">2003</span>
+                                <p>A definitive retrospective gathering strongest unreleased tracks and reimagined favorites.</p>
+                                <div class="btn-container">
+                                    <a href="https://open.spotify.com/album/5bhBO4RjbNGmUO264A3It2" target="_blank" class="btn">Spotify</a>
+                                    <a href="https://music.apple.com/il/album/opportunities/1323164790" target="_blank" class="btn">Apple</a>
+                                    <a href="https://www.youtube.com/watch?v=NCjHGpQ7MSQ&list=OLAK5uy_kLZaWWjdAhR9wQQU5gONa35bn0ghbrRxY" target="_blank" class="btn">YouTube</a>
+                                    <a href="https://www.amazon.com/music/player/albums/B077ZKHJ6R" target="_blank" class="btn">Amazon</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <button class="carousel-btn next" onclick="moveCarousel('albumsCarousel', 1)" aria-label="Next albums">&#10095;</button>
+                <button class="carousel-btn next" onclick="manualGlide('albumsCarousel', 1)" aria-label="Next albums">&#10095;</button>
             </div>
         </section>
 
-        <!-- === CAROUSEL 2: VIDEOS (Showing 3 at a time) === -->
+        <!-- === CAROUSEL 2: VIDEOS === -->
         <section>
             <h2>Featured Videos</h2>
             <div class="carousel-wrapper">
-                <button class="carousel-btn prev" onclick="moveCarousel('videosCarousel', -1)" aria-label="Previous videos">&#10094;</button>
+                <button class="carousel-btn prev" onclick="manualGlide('videosCarousel', -1)" aria-label="Previous videos">&#10094;</button>
                 <div class="carousel-container" id="videosCarousel">
-                    <div class="carousel-track">
-                        
-                        <!-- Video 1 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=GWrGl5GQBu0&list=RDGWrGl5GQBu0&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/GWrGl5GQBu0/hqdefault.jpg" alt="Aaron M. Little – Time’s Up">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">Aaron M. Little</span>
-                                    <h3>Time’s Up</h3>
-                                    <p>You can never go back and sometimes you can’t even make things right.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=GWrGl5GQBu0&list=RDGWrGl5GQBu0&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=GWrGl5GQBu0&list=RDGWrGl5GQBu0&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/GWrGl5GQBu0/hqdefault.jpg" alt="Aaron M. Little – Time’s Up">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">Aaron M. Little</span>
+                                <h3>Time’s Up</h3>
+                                <p>You can never go back and sometimes you can’t even make things right.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=GWrGl5GQBu0&list=RDGWrGl5GQBu0&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Video 2 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=houQP0FF0zI" target="_blank">
-                                        <img src="https://img.youtube.com/vi/houQP0FF0zI/hqdefault.jpg" alt="Aaron M. Little – Good Enough">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">Aaron M. Little</span>
-                                    <h3>Good Enough</h3>
-                                    <p>Come as you are, for indeed you are good enough.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=houQP0FF0zI" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 3 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=4tNulUGDrbs&list=RD4tNulUGDrbs&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/4tNulUGDrbs/hqdefault.jpg" alt="AK Sour – Edgy">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Edgy</h3>
-                                    <p>Life’s coming for you, but only you control how you handle it.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=4tNulUGDrbs&list=RD4tNulUGDrbs&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 4 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=lUnwSg93UsA&list=RDlUnwSg93UsA&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/lUnwSg93UsA/hqdefault.jpg" alt="AK Sour – Forgiveness">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Forgiveness</h3>
-                                    <p>Don’t drink acid and expect your enemy to suffer the consequences!</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=lUnwSg93UsA&list=RDlUnwSg93UsA&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 5 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=fEyMWvrjA3s&list=RDfEyMWvrjA3s&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/fEyMWvrjA3s/hqdefault.jpg" alt="AK Sour – Better">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Better</h3>
-                                    <p>Sometimes you just have to white-knuckle your own reality.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=fEyMWvrjA3s&list=RDfEyMWvrjA3s&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 6 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=at-Q_oxUt_A&list=RDat-Q_oxUt_A&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/at-Q_oxUt_A/hqdefault.jpg" alt="AK Sour – Even Rain is Chased Away">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Even Rain is Chased Away</h3>
-                                    <p>When those troubles come, I know that they can’t stay.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=at-Q_oxUt_A&list=RDat-Q_oxUt_A&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 7 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=jPtl_SYRlio&list=RDjPtl_SYRlio&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/jPtl_SYRlio/hqdefault.jpg" alt="AK Sour – What it Came To">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>What it Came To</h3>
-                                    <p>Life’s greatest dance partners will never be a source of shame.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=jPtl_SYRlio&list=RDjPtl_SYRlio&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 8 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=sxm-H2PThho&list=RDsxm-H2PThho&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/sxm-H2PThho/hqdefault.jpg" alt="AK Sour – Peace">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>Peace</h3>
-                                    <p>Is there any other way to live?</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=sxm-H2PThho&list=RDsxm-H2PThho&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 9 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=q5VU0xsxQBY&list=RDq5VU0xsxQBY&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/q5VU0xsxQBY/hqdefault.jpg" alt="AK Sour – The Game">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>The Game</h3>
-                                    <p>The journey is long, yet, but a vapor.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=q5VU0xsxQBY&list=RDq5VU0xsxQBY&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Video 10 -->
-                        <div class="carousel-item">
-                            <div class="album-card">
-                                <div class="video-thumb-container">
-                                    <a href="https://www.youtube.com/watch?v=jsiskWaTZ2Y&list=RDjsiskWaTZ2Y&start_radio=1" target="_blank">
-                                        <img src="https://img.youtube.com/vi/jsiskWaTZ2Y/hqdefault.jpg" alt="AK Sour – The Choice">
-                                    </a>
-                                </div>
-                                <div class="album-info">
-                                    <span class="artist-subtitle">AK Sour</span>
-                                    <h3>The Choice</h3>
-                                    <p>An AK classic delivered homespun by grandpa.</p>
-                                    <div class="btn-container">
-                                        <a href="https://www.youtube.com/watch?v=jsiskWaTZ2Y&list=RDjsiskWaTZ2Y&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=houQP0FF0zI" target="_blank">
+                                    <img src="https://img.youtube.com/vi/houQP0FF0zI/hqdefault.jpg" alt="Aaron M. Little – Good Enough">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">Aaron M. Little</span>
+                                <h3>Good Enough</h3>
+                                <p>Come as you are, for indeed you are good enough.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=houQP0FF0zI" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=4tNulUGDrbs&list=RD4tNulUGDrbs&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/4tNulUGDrbs/hqdefault.jpg" alt="AK Sour – Edgy">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Edgy</h3>
+                                <p>Life’s coming for you, but only you control how you handle it.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=4tNulUGDrbs&list=RD4tNulUGDrbs&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=lUnwSg93UsA&list=RDlUnwSg93UsA&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/lUnwSg93UsA/hqdefault.jpg" alt="AK Sour – Forgiveness">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Forgiveness</h3>
+                                <p>Don’t drink acid and expect your enemy to suffer the consequences!</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=lUnwSg93UsA&list=RDlUnwSg93UsA&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=fEyMWvrjA3s&list=RDfEyMWvrjA3s&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/fEyMWvrjA3s/hqdefault.jpg" alt="AK Sour – Better">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Better</h3>
+                                <p>Sometimes you just have to white-knuckle your own reality.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=fEyMWvrjA3s&list=RDfEyMWvrjA3s&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=at-Q_oxUt_A&list=RDat-Q_oxUt_A&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/at-Q_oxUt_A/hqdefault.jpg" alt="AK Sour – Even Rain is Chased Away">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Even Rain is Chased Away</h3>
+                                <p>When those troubles come, I know that they can’t stay.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=at-Q_oxUt_A&list=RDat-Q_oxUt_A&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=jPtl_SYRlio&list=RDjPtl_SYRlio&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/jPtl_SYRlio/hqdefault.jpg" alt="AK Sour – What it Came To">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>What it Came To</h3>
+                                <p>Life’s greatest dance partners will never be a source of shame.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=jPtl_SYRlio&list=RDjPtl_SYRlio&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=sxm-H2PThho&list=RDsxm-H2PThho&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/sxm-H2PThho/hqdefault.jpg" alt="AK Sour – Peace">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>Peace</h3>
+                                <p>Is there any other way to live?</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=sxm-H2PThho&list=RDsxm-H2PThho&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=q5VU0xsxQBY&list=RDq5VU0xsxQBY&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/q5VU0xsxQBY/hqdefault.jpg" alt="AK Sour – The Game">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>The Game</h3>
+                                <p>The journey is long, yet, but a vapor.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=q5VU0xsxQBY&list=RDq5VU0xsxQBY&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="album-card">
+                            <div class="video-thumb-container">
+                                <a href="https://www.youtube.com/watch?v=jsiskWaTZ2Y&list=RDjsiskWaTZ2Y&start_radio=1" target="_blank">
+                                    <img src="https://img.youtube.com/vi/jsiskWaTZ2Y/hqdefault.jpg" alt="AK Sour – The Choice">
+                                </a>
+                            </div>
+                            <div class="album-info">
+                                <span class="artist-subtitle">AK Sour</span>
+                                <h3>The Choice</h3>
+                                <p>An AK classic delivered homespun by grandpa.</p>
+                                <div class="btn-container">
+                                    <a href="https://www.youtube.com/watch?v=jsiskWaTZ2Y&list=RDjsiskWaTZ2Y&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <button class="carousel-btn next" onclick="moveCarousel('videosCarousel', 1)" aria-label="Next videos">&#10095;</button>
+                <button class="carousel-btn next" onclick="manualGlide('videosCarousel', 1)" aria-label="Next videos">&#10095;</button>
             </div>
         </section>
 
@@ -1005,76 +1037,97 @@
             }
         });
 
-        // Carousel Navigation Logic + auto-scroll
-        const carouselIndices = {
-            'albumsCarousel': 0,
-            'videosCarousel': 0
-        };
-        const carouselTimers = {};
-        const AUTO_MS = 4500;
+        // Standalone Play/Pause Audio Control
+        const bgAudio = document.getElementById('bgAudio');
+        const bgMusicBtn = document.getElementById('bgMusicToggleBtn');
 
-        function moveCarousel(carouselId, direction, fromAuto) {
+        function toggleBackgroundMusic() {
+            if (bgAudio.paused) {
+                bgAudio.play().then(() => {
+                    bgMusicBtn.textContent = '⏸ Pause Music';
+                }).catch(err => {
+                    console.log("Playback blocked or failed:", err);
+                });
+            } else {
+                bgAudio.pause();
+                bgMusicBtn.textContent = '▶ Play Music';
+            }
+        }
+
+        // Keep button text synchronized if audio pauses naturally
+        bgAudio.addEventListener('play', () => {
+            bgMusicBtn.textContent = '⏸ Pause Music';
+        });
+        bgAudio.addEventListener('pause', () => {
+            bgMusicBtn.textContent = '▶ Play Music';
+        });
+
+        // Silky-Smooth Continuous Gliding Engine using requestAnimationFrame
+        const activeGlides = {};
+
+        function smoothGlideTo(container, targetScrollLeft, duration = 600) {
+            const startScrollLeft = container.scrollLeft;
+            const distance = targetScrollLeft - startScrollLeft;
+            const startTime = performance.now();
+
+            if (activeGlides[container.id]) {
+                cancelAnimationFrame(activeGlides[container.id]);
+            }
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easeProgress = progress < 0.5 
+                    ? 2 * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+                container.scrollLeft = startScrollLeft + (distance * easeProgress);
+
+                if (progress < 1) {
+                    activeGlides[container.id] = requestAnimationFrame(step);
+                } else {
+                    delete activeGlides[container.id];
+                }
+            }
+
+            activeGlides[container.id] = requestAnimationFrame(step);
+        }
+
+        function setupAutoGlide(container, speed = 0.5) {
+            let isPaused = false;
+            let autoGlideId;
+
+            const stepAuto = () => {
+                if (!isPaused && !activeGlides[container.id]) {
+                    const maxScroll = container.scrollWidth - container.clientWidth;
+                    if (container.scrollLeft >= maxScroll - 2) {
+                        container.scrollLeft = 0; 
+                    } else {
+                        container.scrollLeft += speed; 
+                    }
+                }
+                autoGlideId = requestAnimationFrame(stepAuto);
+            };
+
+            autoGlideId = requestAnimationFrame(stepAuto);
+
+            container.addEventListener('mouseenter', () => { isPaused = true; });
+            container.addEventListener('mouseleave', () => { isPaused = false; });
+            container.addEventListener('touchstart', () => { isPaused = true; });
+            container.addEventListener('touchend', () => { isPaused = false; });
+        }
+
+        document.querySelectorAll('.carousel-container').forEach(carousel => {
+            setupAutoGlide(carousel, 0.5);
+        });
+
+        function manualGlide(carouselId, direction) {
             const container = document.getElementById(carouselId);
-            if (!container) return;
-            const track = container.querySelector('.carousel-track');
-            const items = track.querySelectorAll('.carousel-item');
-            if (!items.length) return;
-
-            let visibleCount = 3;
-            if (window.innerWidth <= 600) {
-                visibleCount = 1;
-            } else if (window.innerWidth <= 900) {
-                visibleCount = 2;
-            }
-
-            const maxIndex = Math.max(0, items.length - visibleCount);
-
-            carouselIndices[carouselId] += direction;
-            if (carouselIndices[carouselId] < 0) {
-                carouselIndices[carouselId] = maxIndex;
-            } else if (carouselIndices[carouselId] > maxIndex) {
-                carouselIndices[carouselId] = 0;
-            }
-
-            const itemWidth = items[0].getBoundingClientRect().width;
-            const gap = 32;
-            const scrollAmount = carouselIndices[carouselId] * (itemWidth + gap);
-            track.style.transform = `translateX(-${scrollAmount}px)`;
-
-            if (!fromAuto) startAuto(carouselId);
+            const itemWidth = container.querySelector('.carousel-item').offsetWidth + 32; 
+            const target = container.scrollLeft + (direction * itemWidth * 2);
+            smoothGlideTo(container, target, 500);
         }
-
-        function stopAuto(carouselId) {
-            if (carouselTimers[carouselId]) {
-                clearInterval(carouselTimers[carouselId]);
-                carouselTimers[carouselId] = null;
-            }
-        }
-
-        function startAuto(carouselId) {
-            stopAuto(carouselId);
-            carouselTimers[carouselId] = setInterval(() => {
-                moveCarousel(carouselId, 1, true);
-            }, AUTO_MS);
-        }
-
-        ['albumsCarousel', 'videosCarousel'].forEach((id) => {
-            startAuto(id);
-            const wrapper = document.getElementById(id)?.closest('.carousel-wrapper');
-            if (!wrapper) return;
-            wrapper.addEventListener('mouseenter', () => stopAuto(id));
-            wrapper.addEventListener('mouseleave', () => startAuto(id));
-            wrapper.addEventListener('focusin', () => stopAuto(id));
-            wrapper.addEventListener('focusout', () => startAuto(id));
-        });
-
-        window.addEventListener('resize', () => {
-            Object.keys(carouselIndices).forEach(id => {
-                carouselIndices[id] = 0;
-                const track = document.querySelector(`#${id} .carousel-track`);
-                if (track) track.style.transform = 'translateX(0px)';
-            });
-        });
 
         // Canvas-based Smoke & Fog Background Animation Loop
         const canvas = document.getElementById('smokeCanvas');
