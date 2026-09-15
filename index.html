@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aaron M. Little Music</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0b0c10;
+            --bg-card: #14161f;
+            --accent: #c5a880;
+            --accent-glow: rgba(197, 168, 128, 0.15);
+            --text-main: #f0f2f5;
+            --text-muted: #9ba1a6;
+            --border: #232733;
+            --footer-bg: #08090c;
+            --fallback-bg-1: #1a1e29;
+            --fallback-bg-2: #0f1117;
+            --thumb-bg: #11131a;
+        }
+
+        [data-theme="light"] {
+            --bg-deep: #f4f5f7;
+            --bg-card: #ffffff;
+            --accent: #8c6d42;
+            --accent-glow: rgba(140, 109, 66, 0.12);
+            --text-main: #1a1d24;
+            --text-muted: #5f6672;
+            --border: #d1d5db;
+            --footer-bg: #e5e7eb;
+            --fallback-bg-1: #e2e8f0;
+            --fallback-bg-2: #cbd5e1;
+            --thumb-bg: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        header {
+            position: relative;
+            height: 55vh;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 1rem;
+            background: linear-gradient(rgba(11, 12, 16, 0.75), rgba(11, 12, 16, 0.98)), 
+                        radial-gradient(circle at center, #1f2430 0%, #0b0c10 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] header {
+            background: linear-gradient(rgba(244, 245, 247, 0.85), rgba(244, 245, 247, 0.98)), 
+                        radial-gradient(circle at center, #e2e8f0 0%, #f4f5f7 100%);
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            letter-spacing: 4px;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--accent);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Social & Contact Links in Header */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.9rem;
+            border-radius: 4px;
+            background: var(--bg-card);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            color: var(--bg-deep);
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        section {
+            margin-bottom: 5rem;
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 2.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .section-header-action {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .section-header-action:hover {
+            background-color: var(--accent);
+            color: var(--bg-deep);
+            border-color: var(--accent);
+        }
+
+        /* Discography Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .album-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .album-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .album-art-container {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--thumb-bg);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .album-art-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .album-card:hover .album-art-container img {
+            transform: scale(1.03);
+        }
+
+        .album-art-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--fallback-bg-1) 0%, var(--fallback-bg-2) 100%);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .album-art-fallback span {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .album-art-fallback p {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-top: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .album-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .album-info h3 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .album-info .year {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .album-info p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 40%;
+            text-align: center;
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+            color: var(--bg-deep);
+            border-color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background-color: var(--footer-bg);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
+            <span id="themeIcon">&#9728;</span> <span id="themeText">Light Mode</span>
+        </button>
+        <h1>Aaron M. Little</h1>
+        <p>Songwriter &amp; Producer</p>
+        <div class="social-links">
+            <a href="https://www.youtube.com/user/aaronlittle7" target="_blank" class="social-link">YouTube</a>
+            <a href="https://www.facebook.com/AaronMLittleMusic/" target="_blank" class="social-link">Facebook</a>
+            <a href="https://www.instagram.com/aaronmlittlemusic/" target="_blank" class="social-link">Instagram</a>
+            <a onclick="contactMe(event)" class="social-link" style="cursor: pointer;">Contact</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- === SECTION 1: SOLO RELEASES === -->
+        <section>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="margin-bottom: 0; flex: 1;">Solo Discography</h2>
+                <a href="https://open.spotify.com/artist/55yvQPafo6NBLIpYS2n0HT" target="_blank" class="section-header-action">Spotify Artist Profile</a>
+            </div>
+            <div class="grid">
+                <!-- Solo Album 1: Epexegesis -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="epexegesis.jpg" alt="Epexegesis Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>EPEXEGESIS</span>
+                            <p>2021 Solo Release</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>Epexegesis</h3>
+                        <span class="year">2021</span>
+                        <p>The 16-year gap of creative output is bridged with this collection of thought-provoking and soul nourishing cuts.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/6NgmUdu7iGo0tcWynmLHEo" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/epexegesis/1573690958" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/music/player/albums/B097S8K1L3" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=geDcrrDu-WI&list=OLAK5uy_nK9FIzj8AnWguTnEqhIHeSO8M6Ny3ScuM" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solo Album 2: Aaron M. Little (2005 Debut) -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="aaronmlittle_solo.jpg" alt="Aaron M. Little Debut Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>AARON M. LITTLE</span>
+                            <p>2005 Solo Debut</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>Aaron M. Little</h3>
+                        <span class="year">2005</span>
+                        <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism. If you were somehow a fan of AK Sour, this is basically album #4.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/5zTAl2pU8F2ZFZ9zMdjzmm" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/aaron-m-little/1157196771" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/music/player/albums/B01M0830MU" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=gz_9jAjAikI&list=OLAK5uy_mJouZRk1fH8jcbsXYEiALzu9qN3qf0KjE" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === SECTION 2: AK SOUR ERA === -->
+        <section>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="margin-bottom: 0; flex: 1;">AK Sour Era</h2>
+                <a href="https://open.spotify.com/artist/2YH4FAC4KHVADYc3Hod5s4" target="_blank" class="section-header-action">Spotify Artist Profile</a>
+            </div>
+            <div class="grid">
+                <!-- AK Sour 1: Self-Titled (1999) -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="aksour.jpg" alt="AK Sour Self-Titled Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>AK SOUR</span>
+                            <p>1999 Release</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>AK Sour</h3>
+                        <span class="year">1999</span>
+                        <p>The self-titled introduction to the rock duo’s take on life in the 90s. It lays down the gritty, high-energy blueprint that defined the course they would take into the next millennium.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/7sYGq4NRnwO45yq2smoCf2" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/ak-sour/1157228784" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/music/player/albums/B01LZ8T47W" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=IYGIb-1NFo0&list=OLAK5uy_kzfxUfrKvW6eWM1YBVrRtU_mKik4VKi3w" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AK Sour 2: Well Done (2000) -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="aksour-welldone.jpg" alt="Well Done Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>WELL DONE</span>
+                            <p>2000 Release</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>Well Done</h3>
+                        <span class="year">2000</span>
+                        <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch. It captures the band firing on all cylinders during their peak years.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/32H2CeuFXHQhPs8bpI5H47" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/well-done/1157018542" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/Right-in-You/dp/B01LXY1N3E" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=yrzCZDClWCY&list=OLAK5uy_kQjXcy3Xz87VkCvpd5fZ2NA-oXfE_7Fgc" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AK Sour 3: Explain the Game (2002) -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="aksour-etg.jpg" alt="Explain the Game Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>EXPLAIN THE GAME</span>
+                            <p>2002 Release</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>Explain the Game</h3>
+                        <span class="year">2002</span>
+                        <p>A solid effort that shows maturity and it stands as the definitive culmination of the group's studio evolution.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/0FiWdVSlbyPZhyjyDYTFwU" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/explain-the-game/1157048497" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/music/player/albums/B01LYLJ8J2" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=HaUXU74d7Xs&list=OLAK5uy_nmdADK-EnP-CBiXubTrxDbmFZKppJNC_Q" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === SECTION 3: DUCK ERA === -->
+        <section>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+                <h2 style="margin-bottom: 0; flex: 1;">Duck Era</h2>
+                <a href="https://open.spotify.com/artist/7fk0gxEYx4sfKVnhSN5o2V" target="_blank" class="section-header-action">Spotify Artist Profile</a>
+            </div>
+            <div class="grid">
+                <!-- Duck Card 1: Studio Album (Sauce - 1997) -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="duck-sauce.jpg" alt="Sauce Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>SAUCE</span>
+                            <p>1997 Duck Release</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>Sauce</h3>
+                        <span class="year">1997</span>
+                        <p>A raw, independent snapshot of mid-90s alternative rock grit and DIY production ethos. It preserves the unbridled energy of analog tape and two teenagers that had a dream.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/4ZaZ5Q26zyl2yTU6a6N23g" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/sauce/1322249838" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/music/player/albums/B077Z4N4Q9" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=RLrVRicC8oQ&list=OLAK5uy_lN4NL_c_zrrHBk5_9G7W3gpc1UxCnldI8" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Duck Card 2: Compilation (Opportunities - 2003) -->
+                <div class="album-card">
+                    <div class="album-art-container">
+                        <img src="duck-opportunities.jpg" alt="Opportunities Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="album-art-fallback" style="display:none;">
+                            <span>OPPORTUNITIES</span>
+                            <p>2003 Best-Of Collection</p>
+                        </div>
+                    </div>
+                    <div class="album-info">
+                        <h3>Opportunities</h3>
+                        <span class="year">2003</span>
+                        <p>A definitive retrospective collection gathering the strongest unreleased tracks and reimagined favorites from the catalog. It serves as a comprehensive time capsule of a decade spent writing and recording independently.</p>
+
+                        <div class="btn-container">
+                            <a href="https://open.spotify.com/album/5bhBO4RjbNGmUO264A3It2" target="_blank" class="btn">Spotify</a>
+                            <a href="https://music.apple.com/il/album/opportunities/1323164790" target="_blank" class="btn">Apple Music</a>
+                            <a href="https://www.amazon.com/music/player/albums/B077ZKHJ6R" target="_blank" class="btn">Amazon</a>
+                            <a href="https://www.youtube.com/watch?v=NCjHGpQ7MSQ&list=OLAK5uy_kLZaWWjdAhR9wQQU5gONa35bn0ghbrRxY" target="_blank" class="btn">YouTube</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AARON M. LITTLE MUSIC. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        // Obfuscated mailto handler to keep email hidden from plain HTML scrapers
+        function contactMe(event) {
+            event.preventDefault();
+            const user = "aaronmlittlemusic";
+            const domain = "gmail.com";
+            window.location.href = "mailto:" + user + "@" + domain;
+        }
+
+        // Check for saved user preference, default to dark
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            updateToggleButton('light');
+        }
+
+        function toggleTheme() {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                updateToggleButton('dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                updateToggleButton('light');
+            }
+        }
+
+        function updateToggleButton(theme) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (theme === 'light') {
+                icon.innerHTML = '&#127769;'; // Crescent moon
+                text.textContent = 'Dark Mode';
+            } else {
+                icon.innerHTML = '&#9728;'; // Sun
+                text.textContent = 'Light Mode';
+            }
+        }
+    </script>
+
+</body>
+</html>
