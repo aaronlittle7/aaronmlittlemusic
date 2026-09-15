@@ -1005,18 +1005,21 @@
             }
         });
 
-        // Carousel Navigation Logic
+        // Carousel Navigation Logic + auto-scroll
         const carouselIndices = {
             'albumsCarousel': 0,
             'videosCarousel': 0
         };
+        const carouselTimers = {};
+        const AUTO_MS = 4500;
 
-        function moveCarousel(carouselId, direction) {
+        function moveCarousel(carouselId, direction, fromAuto) {
             const container = document.getElementById(carouselId);
+            if (!container) return;
             const track = container.querySelector('.carousel-track');
             const items = track.querySelectorAll('.carousel-item');
-            
-            // Calculate items per view based on current screen width
+            if (!items.length) return;
+
             let visibleCount = 3;
             if (window.innerWidth <= 600) {
                 visibleCount = 1;
@@ -1025,21 +1028,46 @@
             }
 
             const maxIndex = Math.max(0, items.length - visibleCount);
-            
+
             carouselIndices[carouselId] += direction;
             if (carouselIndices[carouselId] < 0) {
-                carouselIndices[carouselId] = maxIndex; // Loop to end
+                carouselIndices[carouselId] = maxIndex;
             } else if (carouselIndices[carouselId] > maxIndex) {
-                carouselIndices[carouselId] = 0; // Loop to start
+                carouselIndices[carouselId] = 0;
             }
 
             const itemWidth = items[0].getBoundingClientRect().width;
-            const gap = 32; // 2rem gap
+            const gap = 32;
             const scrollAmount = carouselIndices[carouselId] * (itemWidth + gap);
             track.style.transform = `translateX(-${scrollAmount}px)`;
+
+            if (!fromAuto) startAuto(carouselId);
         }
 
-        // Re-adjust carousels on window resize to prevent alignment bugs
+        function stopAuto(carouselId) {
+            if (carouselTimers[carouselId]) {
+                clearInterval(carouselTimers[carouselId]);
+                carouselTimers[carouselId] = null;
+            }
+        }
+
+        function startAuto(carouselId) {
+            stopAuto(carouselId);
+            carouselTimers[carouselId] = setInterval(() => {
+                moveCarousel(carouselId, 1, true);
+            }, AUTO_MS);
+        }
+
+        ['albumsCarousel', 'videosCarousel'].forEach((id) => {
+            startAuto(id);
+            const wrapper = document.getElementById(id)?.closest('.carousel-wrapper');
+            if (!wrapper) return;
+            wrapper.addEventListener('mouseenter', () => stopAuto(id));
+            wrapper.addEventListener('mouseleave', () => startAuto(id));
+            wrapper.addEventListener('focusin', () => stopAuto(id));
+            wrapper.addEventListener('focusout', () => startAuto(id));
+        });
+
         window.addEventListener('resize', () => {
             Object.keys(carouselIndices).forEach(id => {
                 carouselIndices[id] = 0;
