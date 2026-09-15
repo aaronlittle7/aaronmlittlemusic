@@ -10,37 +10,39 @@
     <style>
         :root {
             --bg-deep: #0b0c10;
-            --bg-card: #14161f;
+            --bg-card: rgba(15, 17, 23, 0.35); /* Transparent glass */
             --accent: #c5a880;
-            --accent-glow: rgba(197, 168, 128, 0.15);
+            --accent-glow: rgba(197, 168, 128, 0.25);
             --text-main: #f0f2f5;
-            --text-muted: #9ba1a6;
-            --border: #232733;
-            --footer-bg: #08090c;
-            --fallback-bg-1: #1a1e29;
-            --fallback-bg-2: #0f1117;
+            --text-muted: #b0b6bc;
+            --border: rgba(197, 168, 128, 0.3); 
+            --footer-bg: rgba(8, 9, 12, 0.4);
+            --fallback-bg-1: rgba(26, 30, 41, 0.4);
+            --fallback-bg-2: rgba(15, 17, 23, 0.4);
             --thumb-bg: #11131a;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 1px 8px rgba(0, 0, 0, 0.2);
         }
 
         [data-theme="light"] {
-            --bg-deep: #f4f5f7;
-            --bg-card: #ffffff;
+            --bg-deep: #e8eaed;
+            --bg-card: rgba(255, 255, 255, 0.45); 
             --accent: #8c6d42;
-            --accent-glow: rgba(140, 109, 66, 0.12);
+            --accent-glow: rgba(140, 109, 66, 0.2);
             --text-main: #1a1d24;
-            --text-muted: #5f6672;
-            --border: #d1d5db;
-            --footer-bg: #e5e7eb;
-            --fallback-bg-1: #e2e8f0;
-            --fallback-bg-2: #cbd5e1;
+            --text-muted: #4a515d;
+            --border: rgba(140, 109, 66, 0.3);
+            --footer-bg: rgba(232, 234, 237, 0.45);
+            --fallback-bg-1: rgba(226, 232, 240, 0.4);
+            --fallback-bg-2: rgba(203, 213, 225, 0.4);
             --thumb-bg: #e5e7eb;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 1px 6px rgba(0, 0, 0, 0.08);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         body {
@@ -49,14 +51,103 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* HD Canvas Smoke & Fog Layer */
+        #smokeCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Top Controls Layout (Menu Icon Top Left, Theme Toggle Top Right) */
+        .top-nav-controls {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        /* Hamburger Menu Icon */
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-toggle-btn {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .menu-toggle-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Dropdown Links Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            background: var(--bg-deep);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem 0;
+            min-width: 180px;
+            display: none;
+            z-index: 101;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.6rem 1.2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--accent);
+            color: var(--bg-deep);
         }
 
         /* Theme Toggle Button */
         .theme-toggle {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
             background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border);
             color: var(--text-main);
             padding: 0.5rem 0.9rem;
@@ -68,8 +159,7 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            z-index: 10;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow);
         }
 
         .theme-toggle:hover {
@@ -80,7 +170,7 @@
         /* Hero Section */
         header {
             position: relative;
-            height: 55vh;
+            height: 50vh;
             min-height: 380px;
             display: flex;
             flex-direction: column;
@@ -88,14 +178,8 @@
             align-items: center;
             text-align: center;
             padding: 0 1rem;
-            background: linear-gradient(rgba(11, 12, 16, 0.75), rgba(11, 12, 16, 0.98)), 
-                        radial-gradient(circle at center, #1f2430 0%, #0b0c10 100%);
+            background: transparent;
             border-bottom: 1px solid var(--border);
-        }
-
-        [data-theme="light"] header {
-            background: linear-gradient(rgba(244, 245, 247, 0.85), rgba(244, 245, 247, 0.98)), 
-                        radial-gradient(circle at center, #e2e8f0 0%, #f4f5f7 100%);
         }
 
         header h1 {
@@ -103,8 +187,9 @@
             font-size: clamp(2.5rem, 5vw, 4.5rem);
             letter-spacing: 4px;
             color: var(--text-main);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
             text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         header p {
@@ -113,46 +198,50 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             font-weight: 500;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* Social & Contact Links in Header */
-        .social-links {
+        /* Top Social Bar */
+        .top-social-bar {
             display: flex;
-            gap: 1rem;
-            align-items: center;
+            gap: 0.6rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .social-link {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border: 1px solid var(--border);
-            padding: 0.4rem 0.9rem;
-            border-radius: 4px;
+        .top-social-btn {
             background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.4rem 0.85rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
             transition: all 0.2s ease;
-            cursor: pointer;
+            box-shadow: var(--box-shadow);
         }
 
-        .social-link:hover {
-            color: var(--bg-deep);
+        .top-social-btn:hover {
             background-color: var(--accent);
+            color: var(--bg-deep);
             border-color: var(--accent);
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         section {
-            margin-bottom: 5rem;
+            margin-bottom: 6rem;
         }
 
         h2 {
@@ -164,6 +253,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         h2::after {
@@ -181,10 +271,14 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             border: 1px solid var(--border);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 0.4rem 0.8rem;
             border-radius: 4px;
             transition: all 0.2s ease;
             white-space: nowrap;
+            box-shadow: var(--box-shadow);
         }
 
         .section-header-action:hover {
@@ -193,28 +287,100 @@
             border-color: var(--accent);
         }
 
-        /* Discography Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2.5rem;
+        /* Carousel Architecture */
+        .carousel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
 
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 1rem 0.25rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 2rem;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
+
+        /* Carousel Cards: Exactly 3 items visible on desktop */
+        .carousel-item {
+            flex: 0 0 calc((100% - 4rem) / 3);
+            min-width: 280px;
+        }
+
+        @media (max-width: 900px) {
+            .carousel-item {
+                flex: 0 0 calc((100% - 2rem) / 2);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .carousel-item {
+                flex: 0 0 100%;
+            }
+        }
+
+        /* Carousel Nav Buttons */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: var(--box-shadow);
+            transition: all 0.2s ease;
+            font-size: 1.2rem;
+        }
+
+        .carousel-btn:hover {
+            background-color: var(--accent);
+            color: var(--bg-deep);
+            border-color: var(--accent);
+        }
+
+        .carousel-btn.prev {
+            left: -22px;
+        }
+
+        .carousel-btn.next {
+            right: -22px;
+        }
+
+        /* Fully Transparent Glassmorphism Cards with subtle shadows */
         .album-card {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            height: 100%;
+            box-shadow: var(--box-shadow);
         }
 
         .album-card:hover {
             transform: translateY(-6px);
             border-color: var(--accent);
-            box-shadow: 0 10px 30px var(--accent-glow);
+            box-shadow: 0 16px 45px var(--accent-glow), 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .album-art-container {
@@ -226,14 +392,23 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .album-art-container img {
+        .video-thumb-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: var(--thumb-bg);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .album-art-container img, .video-thumb-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
 
-        .album-card:hover .album-art-container img {
+        .album-card:hover .video-thumb-container img {
             transform: scale(1.03);
         }
 
@@ -263,24 +438,38 @@
             letter-spacing: 1px;
         }
 
+        /* Transparent Text Box / Info Area under cards (Centered Text Alignment) */
         .album-info {
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            background: transparent;
+            text-align: center; /* Centered for clean symmetry */
+            align-items: center;
         }
 
         .album-info h3 {
             font-size: 1.2rem;
             color: var(--text-main);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Subtitle to distinguish artist per project */
+        .album-info .artist-subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+            font-weight: 600;
         }
 
         .album-info .year {
             font-size: 0.85rem;
-            color: var(--accent);
+            color: var(--text-muted);
             margin-bottom: 1rem;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .album-info p {
@@ -288,6 +477,7 @@
             font-size: 0.92rem;
             margin-bottom: 1.5rem;
             flex-grow: 1;
+            text-align: center; /* Centered paragraph text */
         }
 
         .btn-container {
@@ -295,13 +485,15 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: auto;
+            width: 100%;
+            justify-content: center;
         }
 
         .btn {
             flex: 1;
             min-width: 40%;
             text-align: center;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.15);
             color: var(--text-main);
             border: 1px solid var(--border);
             padding: 0.5rem 0.4rem;
@@ -311,6 +503,11 @@
             letter-spacing: 1px;
             text-decoration: none;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="light"] .btn {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .btn:hover {
@@ -327,231 +524,441 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             background-color: var(--footer-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <!-- HD Canvas Smoke & Fog Background Animation -->
+    <canvas id="smokeCanvas" aria-hidden="true"></canvas>
+
+    <div class="top-nav-controls">
+        <!-- Navigation Menu (Top Left) -->
+        <div class="menu-container">
+            <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" aria-label="Toggle navigation menu">
+                <span>&#9776;</span> <span>Links</span>
+            </button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="https://aaronmlittle.com" target="_blank">Aaron M. Little</a>
+                <a href="https://aksour.com" target="_blank">AK Sour</a>
+            </div>
+        </div>
+
+        <!-- Theme Toggle (Top Right) -->
         <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
             <span id="themeIcon">&#9728;</span> <span id="themeText">Light Mode</span>
         </button>
+    </div>
+
+    <header>
         <h1>Aaron M. Little</h1>
         <p>Songwriter &amp; Producer</p>
-        <div class="social-links">
-            <a href="https://www.youtube.com/user/aaronlittle7" target="_blank" class="social-link">YouTube</a>
-            <a href="https://www.facebook.com/AaronMLittleMusic/" target="_blank" class="social-link">Facebook</a>
-            <a href="https://www.instagram.com/aaronmlittlemusic/" target="_blank" class="social-link">Instagram</a>
-            <a onclick="contactMe(event)" class="social-link" style="cursor: pointer;">Contact</a>
+        <div class="top-social-bar">
+            <a href="https://www.facebook.com/AaronMLittleMusic/" target="_blank" class="top-social-btn">Facebook</a>
+            <a href="https://www.youtube.com/user/aaronlittle7" target="_blank" class="top-social-btn">YouTube</a>
+            <a href="https://www.instagram.com/aaronmlittlemusic/" target="_blank" class="top-social-btn">Instagram</a>
+            <a href="mailto:aaronmlittlemusic@gmail.com" class="top-social-btn">Contact</a>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- === SECTION 1: SOLO RELEASES === -->
+        <!-- === CAROUSEL 1: ALBUMS (Showing 3 at a time) === -->
         <section>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
-                <h2 style="margin-bottom: 0; flex: 1;">Solo Discography</h2>
+                <h2 style="margin-bottom: 0; flex: 1;">Complete Discography</h2>
                 <a href="https://open.spotify.com/artist/55yvQPafo6NBLIpYS2n0HT" target="_blank" class="section-header-action">Spotify Artist Profile</a>
             </div>
-            <div class="grid">
-                <!-- Solo Album 1: Epexegesis -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="epexegesis.jpg" alt="Epexegesis Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>EPEXEGESIS</span>
-                            <p>2021 Solo Release</p>
-                        </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>Epexegesis</h3>
-                        <span class="year">2021</span>
-                        <p>The 16-year gap of creative output is bridged with this collection of thought-provoking and soul nourishing cuts.</p>
 
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/6NgmUdu7iGo0tcWynmLHEo" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/epexegesis/1573690958" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/music/player/albums/B097S8K1L3" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=geDcrrDu-WI&list=OLAK5uy_nK9FIzj8AnWguTnEqhIHeSO8M6Ny3ScuM" target="_blank" class="btn">YouTube</a>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn prev" onclick="moveCarousel('albumsCarousel', -1)" aria-label="Previous albums">&#10094;</button>
+                <div class="carousel-container" id="albumsCarousel">
+                    <div class="carousel-track">
+                        
+                        <!-- Album 1: Aaron M. Little - Epexegesis (2021) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="epexegesis.jpg" alt="Epexegesis Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>EPEXEGESIS</span>
+                                        <p>2021 Solo Release</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">Aaron M. Little</span>
+                                    <h3>Epexegesis</h3>
+                                    <span class="year">2021</span>
+                                    <p>The 16-year gap of creative output is bridged with this collection of thought-provoking cuts.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/6NgmUdu7iGo0tcWynmLHEo" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/epexegesis/1573690958" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Album 2: Aaron M. Little - Aaron M. Little (2005) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="aaronmlittle_solo.jpg" alt="Aaron M. Little Debut Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>AARON M. LITTLE</span>
+                                        <p>2005 Solo Debut</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">Aaron M. Little</span>
+                                    <h3>Aaron M. Little</h3>
+                                    <span class="year">2005</span>
+                                    <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/5zTAl2pU8F2ZFZ9zMdjzmm" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/aaron-m-little/1157196771" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Album 3: AK Sour - Explain the Game (2002) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="aksour-etg.jpg" alt="Explain the Game Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>EXPLAIN THE GAME</span>
+                                        <p>2002 Release</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Explain the Game</h3>
+                                    <span class="year">2002</span>
+                                    <p>A solid effort that stands as the definitive culmination of the group's studio evolution.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/0FiWdVSlbyPZhyjyDYTFwU" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/explain-the-game/1157048497" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Album 4: AK Sour - Well Done (2000) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="aksour-welldone.jpg" alt="Well Done Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>WELL DONE</span>
+                                        <p>2000 Release</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Well Done</h3>
+                                    <span class="year">2000</span>
+                                    <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/32H2CeuFXHQhPs8bpI5H47" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/well-done/1157018542" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Album 5: AK Sour - AK Sour Self-Titled (1999) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="aksour.jpg" alt="AK Sour Self-Titled Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>AK SOUR</span>
+                                        <p>1999 Release</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>AK Sour</h3>
+                                    <span class="year">1999</span>
+                                    <p>The self-titled introduction to the rock duo’s take on life in the 90s with gritty high-energy blueprint.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/7sYGq4NRnwO45yq2smoCf2" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/ak-sour/1157228784" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Album 6: Duck - Sauce (1997) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="duck-sauce.jpg" alt="Sauce Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>SAUCE</span>
+                                        <p>1997 Duck Release</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">Duck</span>
+                                    <h3>Sauce</h3>
+                                    <span class="year">1997</span>
+                                    <p>A raw, independent snapshot of mid-90s alternative rock grit and analog tape production ethos.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/4ZaZ5Q26zyl2yTU6a6N23g" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/sauce/1322249838" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Album 7: Duck - Opportunities (2003) -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="album-art-container">
+                                    <img src="duck-opportunities.jpg" alt="Opportunities Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                    <div class="album-art-fallback" style="display:none;">
+                                        <span>OPPORTUNITIES</span>
+                                        <p>2003 Collection</p>
+                                    </div>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">Duck</span>
+                                    <h3>Opportunities</h3>
+                                    <span class="year">2003</span>
+                                    <p>A definitive retrospective gathering strongest unreleased tracks and reimagined favorites.</p>
+                                    <div class="btn-container">
+                                        <a href="https://open.spotify.com/album/5bhBO4RjbNGmUO264A3It2" target="_blank" class="btn">Spotify</a>
+                                        <a href="https://music.apple.com/il/album/opportunities/1323164790" target="_blank" class="btn">Apple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- Solo Album 2: Aaron M. Little (2005 Debut) -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="aaronmlittle_solo.jpg" alt="Aaron M. Little Debut Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>AARON M. LITTLE</span>
-                            <p>2005 Solo Debut</p>
-                        </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>Aaron M. Little</h3>
-                        <span class="year">2005</span>
-                        <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism. If you were somehow a fan of AK Sour, this is basically album #4.</p>
-
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/5zTAl2pU8F2ZFZ9zMdjzmm" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/aaron-m-little/1157196771" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/music/player/albums/B01M0830MU" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=gz_9jAjAikI&list=OLAK5uy_mJouZRk1fH8jcbsXYEiALzu9qN3qf0KjE" target="_blank" class="btn">YouTube</a>
-                        </div>
-                    </div>
-                </div>
+                <button class="carousel-btn next" onclick="moveCarousel('albumsCarousel', 1)" aria-label="Next albums">&#10095;</button>
             </div>
         </section>
 
-        <!-- === SECTION 2: AK SOUR ERA === -->
+        <!-- === CAROUSEL 2: VIDEOS (Showing 3 at a time) === -->
         <section>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
-                <h2 style="margin-bottom: 0; flex: 1;">AK Sour Era</h2>
-                <a href="https://open.spotify.com/artist/2YH4FAC4KHVADYc3Hod5s4" target="_blank" class="section-header-action">Spotify Artist Profile</a>
-            </div>
-            <div class="grid">
-                <!-- AK Sour 1: Self-Titled (1999) -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="aksour.jpg" alt="AK Sour Self-Titled Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>AK SOUR</span>
-                            <p>1999 Release</p>
+            <h2>Featured Videos</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn prev" onclick="moveCarousel('videosCarousel', -1)" aria-label="Previous videos">&#10094;</button>
+                <div class="carousel-container" id="videosCarousel">
+                    <div class="carousel-track">
+                        
+                        <!-- Video 1 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=GWrGl5GQBu0&list=RDGWrGl5GQBu0&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/GWrGl5GQBu0/hqdefault.jpg" alt="Aaron M. Little – Time’s Up">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">Aaron M. Little</span>
+                                    <h3>Time’s Up</h3>
+                                    <p>You can never go back and sometimes you can’t even make things right.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=GWrGl5GQBu0&list=RDGWrGl5GQBu0&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>AK Sour</h3>
-                        <span class="year">1999</span>
-                        <p>The self-titled introduction to the rock duo’s take on life in the 90s. It lays down the gritty, high-energy blueprint that defined the course they would take into the next millennium.</p>
 
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/7sYGq4NRnwO45yq2smoCf2" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/ak-sour/1157228784" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/music/player/albums/B01LZ8T47W" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=IYGIb-1NFo0&list=OLAK5uy_kzfxUfrKvW6eWM1YBVrRtU_mKik4VKi3w" target="_blank" class="btn">YouTube</a>
+                        <!-- Video 2 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=houQP0FF0zI" target="_blank">
+                                        <img src="https://img.youtube.com/vi/houQP0FF0zI/hqdefault.jpg" alt="Aaron M. Little – Good Enough">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">Aaron M. Little</span>
+                                    <h3>Good Enough</h3>
+                                    <p>Come as you are, for indeed you are good enough.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=houQP0FF0zI" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Video 3 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=4tNulUGDrbs&list=RD4tNulUGDrbs&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/4tNulUGDrbs/hqdefault.jpg" alt="AK Sour – Edgy">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Edgy</h3>
+                                    <p>Life’s coming for you, but only you control how you handle it.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=4tNulUGDrbs&list=RD4tNulUGDrbs&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 4 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=lUnwSg93UsA&list=RDlUnwSg93UsA&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/lUnwSg93UsA/hqdefault.jpg" alt="AK Sour – Forgiveness">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Forgiveness</h3>
+                                    <p>Don’t drink acid and expect your enemy to suffer the consequences!</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=lUnwSg93UsA&list=RDlUnwSg93UsA&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 5 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=fEyMWvrjA3s&list=RDfEyMWvrjA3s&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/fEyMWvrjA3s/hqdefault.jpg" alt="AK Sour – Better">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Better</h3>
+                                    <p>Sometimes you just have to white-knuckle your own reality.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=fEyMWvrjA3s&list=RDfEyMWvrjA3s&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 6 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=at-Q_oxUt_A&list=RDat-Q_oxUt_A&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/at-Q_oxUt_A/hqdefault.jpg" alt="AK Sour – Even Rain is Chased Away">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Even Rain is Chased Away</h3>
+                                    <p>When those troubles come, I know that they can’t stay.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=at-Q_oxUt_A&list=RDat-Q_oxUt_A&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 7 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=jPtl_SYRlio&list=RDjPtl_SYRlio&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/jPtl_SYRlio/hqdefault.jpg" alt="AK Sour – What it Came To">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>What it Came To</h3>
+                                    <p>Life’s greatest dance partners will never be a source of shame.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=jPtl_SYRlio&list=RDjPtl_SYRlio&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 8 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=sxm-H2PThho&list=RDsxm-H2PThho&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/sxm-H2PThho/hqdefault.jpg" alt="AK Sour – Peace">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>Peace</h3>
+                                    <p>Is there any other way to live?</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=sxm-H2PThho&list=RDsxm-H2PThho&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 9 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=q5VU0xsxQBY&list=RDq5VU0xsxQBY&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/q5VU0xsxQBY/hqdefault.jpg" alt="AK Sour – The Game">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>The Game</h3>
+                                    <p>The journey is long, yet, but a vapor.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=q5VU0xsxQBY&list=RDq5VU0xsxQBY&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video 10 -->
+                        <div class="carousel-item">
+                            <div class="album-card">
+                                <div class="video-thumb-container">
+                                    <a href="https://www.youtube.com/watch?v=jsiskWaTZ2Y&list=RDjsiskWaTZ2Y&start_radio=1" target="_blank">
+                                        <img src="https://img.youtube.com/vi/jsiskWaTZ2Y/hqdefault.jpg" alt="AK Sour – The Choice">
+                                    </a>
+                                </div>
+                                <div class="album-info">
+                                    <span class="artist-subtitle">AK Sour</span>
+                                    <h3>The Choice</h3>
+                                    <p>An AK classic delivered homespun by grandpa.</p>
+                                    <div class="btn-container">
+                                        <a href="https://www.youtube.com/watch?v=jsiskWaTZ2Y&list=RDjsiskWaTZ2Y&start_radio=1" target="_blank" class="btn" style="flex: 1;">Watch on YouTube</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
-                <!-- AK Sour 2: Well Done (2000) -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="aksour-welldone.jpg" alt="Well Done Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>WELL DONE</span>
-                            <p>2000 Release</p>
-                        </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>Well Done</h3>
-                        <span class="year">2000</span>
-                        <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch. It captures the band firing on all cylinders during their peak years.</p>
-
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/32H2CeuFXHQhPs8bpI5H47" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/well-done/1157018542" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/Right-in-You/dp/B01LXY1N3E" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=yrzCZDClWCY&list=OLAK5uy_kQjXcy3Xz87VkCvpd5fZ2NA-oXfE_7Fgc" target="_blank" class="btn">YouTube</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AK Sour 3: Explain the Game (2002) -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="aksour-etg.jpg" alt="Explain the Game Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>EXPLAIN THE GAME</span>
-                            <p>2002 Release</p>
-                        </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>Explain the Game</h3>
-                        <span class="year">2002</span>
-                        <p>A solid effort that shows maturity and it stands as the definitive culmination of the group's studio evolution.</p>
-
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/0FiWdVSlbyPZhyjyDYTFwU" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/explain-the-game/1157048497" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/music/player/albums/B01LYLJ8J2" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=HaUXU74d7Xs&list=OLAK5uy_nmdADK-EnP-CBiXubTrxDbmFZKppJNC_Q" target="_blank" class="btn">YouTube</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- === SECTION 3: DUCK ERA === -->
-        <section>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
-                <h2 style="margin-bottom: 0; flex: 1;">Duck Era</h2>
-                <a href="https://open.spotify.com/artist/7fk0gxEYx4sfKVnhSN5o2V" target="_blank" class="section-header-action">Spotify Artist Profile</a>
-            </div>
-            <div class="grid">
-                <!-- Duck Card 1: Studio Album (Sauce - 1997) -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="duck-sauce.jpg" alt="Sauce Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>SAUCE</span>
-                            <p>1997 Duck Release</p>
-                        </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>Sauce</h3>
-                        <span class="year">1997</span>
-                        <p>A raw, independent snapshot of mid-90s alternative rock grit and DIY production ethos. It preserves the unbridled energy of analog tape and two teenagers that had a dream.</p>
-
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/4ZaZ5Q26zyl2yTU6a6N23g" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/sauce/1322249838" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/music/player/albums/B077Z4N4Q9" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=RLrVRicC8oQ&list=OLAK5uy_lN4NL_c_zrrHBk5_9G7W3gpc1UxCnldI8" target="_blank" class="btn">YouTube</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Duck Card 2: Compilation (Opportunities - 2003) -->
-                <div class="album-card">
-                    <div class="album-art-container">
-                        <img src="duck-opportunities.jpg" alt="Opportunities Album Cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                        <div class="album-art-fallback" style="display:none;">
-                            <span>OPPORTUNITIES</span>
-                            <p>2003 Best-Of Collection</p>
-                        </div>
-                    </div>
-                    <div class="album-info">
-                        <h3>Opportunities</h3>
-                        <span class="year">2003</span>
-                        <p>A definitive retrospective collection gathering the strongest unreleased tracks and reimagined favorites from the catalog. It serves as a comprehensive time capsule of a decade spent writing and recording independently.</p>
-
-                        <div class="btn-container">
-                            <a href="https://open.spotify.com/album/5bhBO4RjbNGmUO264A3It2" target="_blank" class="btn">Spotify</a>
-                            <a href="https://music.apple.com/il/album/opportunities/1323164790" target="_blank" class="btn">Apple Music</a>
-                            <a href="https://www.amazon.com/music/player/albums/B077ZKHJ6R" target="_blank" class="btn">Amazon</a>
-                            <a href="https://www.youtube.com/watch?v=NCjHGpQ7MSQ&list=OLAK5uy_kLZaWWjdAhR9wQQU5gONa35bn0ghbrRxY" target="_blank" class="btn">YouTube</a>
-                        </div>
-                    </div>
-                </div>
+                <button class="carousel-btn next" onclick="moveCarousel('videosCarousel', 1)" aria-label="Next videos">&#10095;</button>
             </div>
         </section>
 
     </div>
 
     <footer>
-        <p>&copy; 2026 AARON M. LITTLE MUSIC. ALL RIGHTS RESERVED.</p>
+        <p>&copy; 2026 DUCK TAPE MUSIC. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <script>
-        // Obfuscated mailto handler to keep email hidden from plain HTML scrapers
-        function contactMe(event) {
-            event.preventDefault();
-            const user = "aaronmlittlemusic";
-            const domain = "gmail.com";
-            window.location.href = "mailto:" + user + "@" + domain;
-        }
-
         // Check for saved user preference, default to dark
         const currentTheme = localStorage.getItem('theme') || 'dark';
         if (currentTheme === 'light') {
@@ -583,6 +990,144 @@
                 text.textContent = 'Light Mode';
             }
         }
+
+        // Toggle Hamburger Links Menu
+        function toggleMenu() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            const menuContainer = document.querySelector('.menu-container');
+            if (!menuContainer.contains(e.target)) {
+                document.getElementById('dropdownMenu').classList.remove('active');
+            }
+        });
+
+        // Carousel Navigation Logic
+        const carouselIndices = {
+            'albumsCarousel': 0,
+            'videosCarousel': 0
+        };
+
+        function moveCarousel(carouselId, direction) {
+            const container = document.getElementById(carouselId);
+            const track = container.querySelector('.carousel-track');
+            const items = track.querySelectorAll('.carousel-item');
+            
+            // Calculate items per view based on current screen width
+            let visibleCount = 3;
+            if (window.innerWidth <= 600) {
+                visibleCount = 1;
+            } else if (window.innerWidth <= 900) {
+                visibleCount = 2;
+            }
+
+            const maxIndex = Math.max(0, items.length - visibleCount);
+            
+            carouselIndices[carouselId] += direction;
+            if (carouselIndices[carouselId] < 0) {
+                carouselIndices[carouselId] = maxIndex; // Loop to end
+            } else if (carouselIndices[carouselId] > maxIndex) {
+                carouselIndices[carouselId] = 0; // Loop to start
+            }
+
+            const itemWidth = items[0].getBoundingClientRect().width;
+            const gap = 32; // 2rem gap
+            const scrollAmount = carouselIndices[carouselId] * (itemWidth + gap);
+            track.style.transform = `translateX(-${scrollAmount}px)`;
+        }
+
+        // Re-adjust carousels on window resize to prevent alignment bugs
+        window.addEventListener('resize', () => {
+            Object.keys(carouselIndices).forEach(id => {
+                carouselIndices[id] = 0;
+                const track = document.querySelector(`#${id} .carousel-track`);
+                if (track) track.style.transform = 'translateX(0px)';
+            });
+        });
+
+        // Canvas-based Smoke & Fog Background Animation Loop
+        const canvas = document.getElementById('smokeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class SmokeParticle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 300;
+                this.size = Math.random() * 280 + 180;
+                this.speedY = Math.random() * 2.2 + 1.2; 
+                this.speedX = (Math.random() - 0.5) * 1.5; 
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = (Math.random() - 0.5) * 0.02; 
+                this.opacity = Math.random() * 0.22 + 0.08; 
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX + Math.sin(this.angle) * 1.2;
+                this.angle += this.spin;
+
+                if (this.y < -this.size) {
+                    this.reset();
+                    this.y = height + this.size;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+
+                const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+                const r = isLight ? 120 : 197;
+                const g = isLight ? 100 : 168;
+                const b = isLight ? 75  : 128;
+
+                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size);
+                grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.opacity})`);
+                grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${this.opacity * 0.5})`);
+                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const particleCount = 28;
+        const particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            const p = new SmokeParticle();
+            p.y = Math.random() * height; 
+            particles.push(p);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     </script>
 
 </body>
