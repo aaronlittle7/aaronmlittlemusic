@@ -10,7 +10,7 @@
     <style>
         :root {
             --bg-deep: #0b0c10;
-            --bg-card: rgba(15, 17, 23, 0.35); /* Transparent glass */
+            --bg-card: rgba(15, 17, 23, 0.35);
             --accent: #c5a880;
             --accent-glow: rgba(197, 168, 128, 0.25);
             --text-main: #f0f2f5;
@@ -55,7 +55,6 @@
             position: relative;
         }
 
-        /* HD Canvas Smoke & Fog Layer */
         #smokeCanvas {
             position: fixed;
             top: 0;
@@ -66,7 +65,6 @@
             z-index: -1;
         }
 
-        /* Top Controls Layout */
         .top-nav-controls {
             position: absolute;
             top: 1.5rem;
@@ -84,7 +82,6 @@
             gap: 0.75rem;
         }
 
-        /* Standalone Audio Play Button */
         .audio-control-btn {
             background: var(--bg-card);
             backdrop-filter: blur(12px);
@@ -108,7 +105,6 @@
             color: var(--accent);
         }
 
-        /* Hamburger Menu Icon */
         .menu-container {
             position: relative;
         }
@@ -136,7 +132,6 @@
             color: var(--accent);
         }
 
-        /* Dropdown Links Menu */
         .dropdown-menu {
             position: absolute;
             top: calc(100% + 0.5rem);
@@ -175,7 +170,6 @@
             color: var(--bg-deep);
         }
 
-        /* Theme Toggle Button */
         .theme-toggle {
             background: var(--bg-card);
             backdrop-filter: blur(12px);
@@ -199,7 +193,6 @@
             color: var(--accent);
         }
 
-        /* Hero Section */
         header {
             position: relative;
             height: 50vh;
@@ -234,7 +227,6 @@
             text-shadow: 0 1px 6px rgba(0,0,0,0.3);
         }
 
-        /* Top Social Bar */
         .top-social-bar {
             display: flex;
             gap: 0.6rem;
@@ -319,7 +311,6 @@
             border-color: var(--accent);
         }
 
-        /* Carousel Architecture with Smooth Continuous Gliding */
         .carousel-wrapper {
             position: relative;
             display: flex;
@@ -562,21 +553,18 @@
 </head>
 <body>
 
-    <!-- HD Canvas Smoke & Fog Background Animation -->
     <canvas id="smokeCanvas" aria-hidden="true"></canvas>
 
-    <!-- Background Audio Playlist Element (Starts Paused by Default) -->
-    <audio id="bgAudio" preload="auto"></audio>
+    <audio id="bgAudio" preload="auto">
+        Your browser does not support the audio element.
+    </audio>
 
     <div class="top-nav-controls">
-        <!-- Top Left Group: Standalone Play Button & Links Menu -->
         <div class="top-left-group">
-            <!-- Standalone Music Play/Pause Button -->
             <button class="audio-control-btn" id="bgMusicToggleBtn" onclick="toggleBackgroundMusic()" aria-label="Toggle background music">
                 ▶ Play Music
             </button>
 
-            <!-- Navigation Menu -->
             <div class="menu-container">
                 <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()" aria-label="Toggle navigation menu">
                     <span>&#9776;</span> <span>Links</span>
@@ -588,7 +576,6 @@
             </div>
         </div>
 
-        <!-- Theme Toggle (Top Right) -->
         <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
             <span id="themeIcon">&#9728;</span> <span id="themeText">Light Mode</span>
         </button>
@@ -630,7 +617,7 @@
                                 <span class="artist-subtitle">Aaron M. Little</span>
                                 <h3>Epexegesis</h3>
                                 <span class="year">2021</span>
-                                <p>The 16-year gap of creative output is bridged with this collection of thought-provoking cuts.</p>
+                                <p>The 16-year gap of creative output is bridged with this collection of thought-provoking and soul nourishing cuts.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/6NgmUdu7iGo0tcWynmLHEo" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/epexegesis/1573690958" target="_blank" class="btn">Apple</a>
@@ -654,7 +641,7 @@
                                 <span class="artist-subtitle">Aaron M. Little</span>
                                 <h3>Aaron M. Little</h3>
                                 <span class="year">2005</span>
-                                <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism.</p>
+                                <p>A foundational singer-songwriter debut merging melodic rock hooks with introspective lyricism. If you were somehow a fan of AK Sour, this is basically album #4.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/5zTAl2pU8F2ZFZ9zMdjzmm" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/aaron-m-little/1157196771" target="_blank" class="btn">Apple</a>
@@ -678,7 +665,7 @@
                                 <span class="artist-subtitle">AK Sour</span>
                                 <h3>Explain the Game</h3>
                                 <span class="year">2002</span>
-                                <p>A solid effort that stands as the definitive culmination of the group's studio evolution.</p>
+                                <p>A solid effort that shows maturity and it stands as the definitive culmination of the group's studio evolution.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/0FiWdVSlbyPZhyjyDYTFwU" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/explain-the-game/1157048497" target="_blank" class="btn">Apple</a>
@@ -702,7 +689,7 @@
                                 <span class="artist-subtitle">AK Sour</span>
                                 <h3>Well Done</h3>
                                 <span class="year">2000</span>
-                                <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch.</p>
+                                <p>A sophomore follow-up that tightens the group's identity with soulful grooves and sharp melodic punch. It captures the band firing on all cylinders during their peak years.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/32H2CeuFXHQhPs8bpI5H47" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/well-done/1157018542" target="_blank" class="btn">Apple</a>
@@ -726,7 +713,7 @@
                                 <span class="artist-subtitle">AK Sour</span>
                                 <h3>AK Sour</h3>
                                 <span class="year">1999</span>
-                                <p>The self-titled introduction to the rock duo’s take on life in the 90s with gritty high-energy blueprint.</p>
+                                <p>The self-titled introduction to the rock duo’s take on life in the 90s. It lays down the gritty, high-energy blueprint that defined the course they would take into the next millennium.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/7sYGq4NRnwO45yq2smoCf2" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/ak-sour/1157228784" target="_blank" class="btn">Apple</a>
@@ -750,7 +737,7 @@
                                 <span class="artist-subtitle">Duck</span>
                                 <h3>Sauce</h3>
                                 <span class="year">1997</span>
-                                <p>A raw, independent snapshot of mid-90s alternative rock grit and analog tape production ethos.</p>
+                                <p>A raw, independent snapshot of mid-90s alternative rock grit and DIY production ethos. It preserves the unbridled energy of analog tape and two teenagers that had a dream.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/4ZaZ5Q26zyl2yTU6a6N23g" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/sauce/1322249838" target="_blank" class="btn">Apple</a>
@@ -774,7 +761,7 @@
                                 <span class="artist-subtitle">Duck</span>
                                 <h3>Opportunities</h3>
                                 <span class="year">2003</span>
-                                <p>A definitive retrospective gathering strongest unreleased tracks and reimagined favorites.</p>
+                                <p>A definitive retrospective collection gathering the strongest outtakes and reimagined favorites from the catalog. It serves as a comprehensive time capsule of a decade spent writing and recording independently.</p>
                                 <div class="btn-container">
                                     <a href="https://open.spotify.com/album/5bhBO4RjbNGmUO264A3It2" target="_blank" class="btn">Spotify</a>
                                     <a href="https://music.apple.com/il/album/opportunities/1323164790" target="_blank" class="btn">Apple</a>
@@ -988,7 +975,6 @@
     </footer>
 
     <script>
-        // Check for saved user preference, default to dark
         const currentTheme = localStorage.getItem('theme') || 'dark';
         if (currentTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
@@ -1012,21 +998,19 @@
             const icon = document.getElementById('themeIcon');
             const text = document.getElementById('themeText');
             if (theme === 'light') {
-                icon.innerHTML = '&#127769;'; // Crescent moon
+                icon.innerHTML = '&#127769;';
                 text.textContent = 'Dark Mode';
             } else {
-                icon.innerHTML = '&#9728;'; // Sun
+                icon.innerHTML = '&#9728;';
                 text.textContent = 'Light Mode';
             }
         }
 
-        // Toggle Hamburger Links Menu
         function toggleMenu() {
             const dropdown = document.getElementById('dropdownMenu');
             dropdown.classList.toggle('active');
         }
 
-        // Close dropdown when clicking outside
         window.addEventListener('click', (e) => {
             const menuContainer = document.querySelector('.menu-container');
             if (!menuContainer.contains(e.target)) {
@@ -1034,54 +1018,60 @@
             }
         });
 
-        // Background Audio Playlist Engine
+        // Playlist Configuration
         const playlist = [
-            'Chains-mastered.mp3',
-            'There-is-Love-mastered.mp3',
-            'Sold-mastered.mp3'
+            { title: "Chains", src: "Chains-mastered.mp3" },
+            { title: "Sold", src: "Sold-mastered.mp3" },
+            { title: "There is Love", src: "There-is-Love-mastered.mp3" }
         ];
+        
         let currentTrackIndex = 0;
-
         const bgAudio = document.getElementById('bgAudio');
         const bgMusicBtn = document.getElementById('bgMusicToggleBtn');
 
         function loadTrack(index) {
-            bgAudio.src = playlist[index];
+            currentTrackIndex = index;
+            bgAudio.src = playlist[currentTrackIndex].src;
             bgAudio.load();
         }
 
-        loadTrack(currentTrackIndex);
-
-        bgAudio.addEventListener('ended', () => {
-            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-            loadTrack(currentTrackIndex);
-            bgAudio.play().catch(err => {
-                console.log("Auto-play next track blocked or failed:", err);
-            });
-        });
-
         function toggleBackgroundMusic() {
+            if (bgAudio.src === "" || bgAudio.src === window.location.href) {
+                loadTrack(currentTrackIndex);
+            }
+
             if (bgAudio.paused) {
                 bgAudio.play().then(() => {
-                    bgMusicBtn.textContent = '⏸ Pause Music';
+                    bgMusicBtn.textContent = `⏸ Pause (${playlist[currentTrackIndex].title})`;
                 }).catch(err => {
                     console.log("Playback blocked or failed:", err);
                 });
             } else {
                 bgAudio.pause();
-                bgMusicBtn.textContent = '▶ Play Music';
+                bgMusicBtn.textContent = `▶ Play Music`;
             }
         }
 
-        // Keep button text synchronized if audio pauses naturally
-        bgAudio.addEventListener('play', () => {
-            bgMusicBtn.textContent = '⏸ Pause Music';
-        });
-        bgAudio.addEventListener('pause', () => {
-            bgMusicBtn.textContent = '▶ Play Music';
+        // Automatically advance to the next track and loop infinitely
+        bgAudio.addEventListener('ended', () => {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(currentTrackIndex);
+            bgAudio.play().then(() => {
+                bgMusicBtn.textContent = `⏸ Pause (${playlist[currentTrackIndex].title})`;
+            }).catch(err => {
+                console.log("Auto-advance playback failed:", err);
+            });
         });
 
-        // Time-Delta Uniform Scrolling Engine (Independent of 60Hz/120Hz/144Hz Refresh Rates)
+        bgAudio.addEventListener('pause', () => {
+            if (bgAudio.currentTime === 0 || bgAudio.ended) {
+                bgMusicBtn.textContent = '▶ Play Music';
+            }
+        });
+
+        // Initialize first track source
+        loadTrack(0);
+
         const activeGlides = {};
 
         function smoothGlideTo(container, targetScrollLeft, duration = 600) {
@@ -1113,41 +1103,38 @@
             activeGlides[container.id] = requestAnimationFrame(step);
         }
 
-        function setupAutoGlide(container, speedPxPerSec = 30) {
+        const autoGlideDirections = {};
+
+        function setupAutoGlide(container, speed = 0.5) {
             let isPaused = false;
-            let lastTime = performance.now();
+            let autoGlideId;
+            autoGlideDirections[container.id] = 1;
 
-            const stepAuto = (currentTime) => {
-                const deltaTime = (currentTime - lastTime) / 1000;
-                lastTime = currentTime;
-
+            const stepAuto = () => {
                 if (!isPaused && !activeGlides[container.id]) {
                     const maxScroll = container.scrollWidth - container.clientWidth;
+
                     if (container.scrollLeft >= maxScroll - 2) {
-                        container.scrollLeft = 0; 
-                    } else {
-                        container.scrollLeft += speedPxPerSec * deltaTime; 
+                        autoGlideDirections[container.id] = -1;
+                    } else if (container.scrollLeft <= 2) {
+                        autoGlideDirections[container.id] = 1;
                     }
+
+                    container.scrollLeft += speed * autoGlideDirections[container.id];
                 }
-                requestAnimationFrame(stepAuto);
+                autoGlideId = requestAnimationFrame(stepAuto);
             };
 
-            requestAnimationFrame(stepAuto);
+            autoGlideId = requestAnimationFrame(stepAuto);
 
             container.addEventListener('mouseenter', () => { isPaused = true; });
-            container.addEventListener('mouseleave', () => { 
-                isPaused = false; 
-                lastTime = performance.now(); // reset delta time reference to avoid a jump
-            });
+            container.addEventListener('mouseleave', () => { isPaused = false; });
             container.addEventListener('touchstart', () => { isPaused = true; });
-            container.addEventListener('touchend', () => { 
-                isPaused = false; 
-                lastTime = performance.now(); 
-            });
+            container.addEventListener('touchend', () => { isPaused = false; });
         }
 
         document.querySelectorAll('.carousel-container').forEach(carousel => {
-            setupAutoGlide(carousel, 30); // 30 pixels per second uniformly across all screens
+            setupAutoGlide(carousel, 0.5);
         });
 
         function manualGlide(carouselId, direction) {
@@ -1157,7 +1144,6 @@
             smoothGlideTo(container, target, 500);
         }
 
-        // Canvas-based Smoke & Fog Background Animation Loop
         const canvas = document.getElementById('smokeCanvas');
         const ctx = canvas.getContext('2d');
 
